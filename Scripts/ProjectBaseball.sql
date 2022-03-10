@@ -1,6 +1,6 @@
 select min(yearid), max(yearid)
 from batting
-Answer one is 1871 - 2016
+Answer 1 is 1871 - 2016
 
 Select min(height)
 From people
@@ -17,7 +17,7 @@ Select name
 From teams
 Where teamid = 'SLA'
 
-Answer two name is Eddie Gaedel and height is 43 and team is St. Louis Browns and played one game.
+Answer 2 name is Eddie Gaedel and height is 43 and team is St. Louis Browns and played one game.
 
 Select *
 From schools
@@ -48,12 +48,8 @@ Group By decade
 Order by decade
 Answer 5 Homerun averages trend upwards. Strikeout averages are a can of worms.
 
-Select *
-From batting
-Where yearid = 2016
-sb/(sb + cs)
 
-SELECT SUM(b.sb) * 100.0 / NULLIF(SUM(b.sb + b.cs),0) AS percent_success,
+SELECT SUM(b.sb) * 100.0 / SUM(b.sb + b.cs) AS percent_success,
 p.namefirst, p.namelast, sb, cs
 FROM batting AS b
 INNER JOIN people AS p
@@ -62,7 +58,37 @@ WHERE b.yearid = '2016' and sb + cs >= 20
 GROUP BY p.namefirst, p.namelast, sb, cs
 ORDER BY percent_success DESC;
 Answer 6 is Chris Owings
-	  
+
+
+Select teams.name, yearid, w
+FROM teams
+WHERE yearid >= 1970 AND yearid <= 2016 AND wswin = 'N'
+ORDER BY w DESC
+
+Select teams.name, yearid, w
+FROM teams
+WHERE yearid >= 1970 AND yearid <= 2016 AND wswin = 'Y' AND yearid <> 1981
+ORDER BY w ASC
+
+Select teams.name, teams.yearid, teams.w
+FROM teams
+JOIN (
+	SELECT Distinct yearid, MAX(w) AS maxwins
+	FROM teams
+	GROUP BY yearid
+) teamswithmaxwins
+ON teams.w = teamswithmaxwins.maxwins AND teams.yearid = teamswithmaxwins.yearid
+WHERE teams.yearid >= 1970 AND teams.yearid <= 2016 AND teams.wswin = 'Y'
+
+
+Answer 7 Largest number of wins is 116 for Seattle Mariners in 2001. LA Dodgers smallest number of wins for team that did win world series. Player strike happened
+in 1981. Players lost more money than owners during that time. After removing 1981 St Louis Cardinals only had 83 wins. 12 times the teams with the most wins win the 
+world series. 32.4% of the time.
+
+SELECT DISTINCT team, park, SUM(attendance)/SUM(games) AS averageattendance
+FROM homegames
+GROUP BY team, park
+WHERE	  
 
 			
 
