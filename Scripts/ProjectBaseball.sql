@@ -85,12 +85,48 @@ Answer 7 Largest number of wins is 116 for Seattle Mariners in 2001. LA Dodgers 
 in 1981. Players lost more money than owners during that time. After removing 1981 St Louis Cardinals only had 83 wins. 12 times the teams with the most wins win the 
 world series. 32.4% of the time.
 
-SELECT DISTINCT team, park, SUM(attendance)/SUM(games) AS averageattendance
+SELECT homegames.team, homegames.park, SUM(homegames.attendance)/SUM(homegames.games) AS averageattendance
 FROM homegames
-GROUP BY team, park
-WHERE	  
+JOIN (
+	SELECT Distinct park, SUM(games) AS totalgames
+	FROM homegames
+	GROUP BY park
+) totalgamesbypark
+ON totalgamesbypark.park = homegames.park
+WHERE totalgamesbypark.totalgames >= 10 AND homegames.year = 2016
+GROUP BY homegames.team, homegames.park
+ORDER BY averageattendance DESC
+LIMIT 5 			
 
-			
+SELECT homegames.team, homegames.park, SUM(homegames.attendance)/SUM(homegames.games) AS averageattendance
+FROM homegames
+JOIN (
+	SELECT Distinct park, SUM(games) AS totalgames
+	FROM homegames
+	GROUP BY park
+) totalgamesbypark
+ON totalgamesbypark.park = homegames.park
+WHERE totalgamesbypark.totalgames >= 10 AND homegames.year = 2016
+GROUP BY homegames.team, homegames.park
+ORDER BY averageattendance ASC
+LIMIT 5 
+Answer 8 is found after running query.
 
 
+SELECT *
+FROM awardsmanagers
+
+SELECT playerid, yearid, COUNT(case WHEN awardid = 'BBWAA Manager of the Year' AND lgid = 'AL' THEN 1 END) AS alaward, 
+COUNT(case WHEN awardid = 'BBWAA Manager of the Year' AND lgid = 'NL' THEN 1 END) 
+FROM awardsmanagers
+GROUP BY playerid, yearid
+HAVING alaward = 1 AND nlaward = 1
+ORDER BY yearid ASC
+
+SELECT playerid, yearid, COUNT(case WHEN awardid = 'BBWAA Manager of the Year' AND lgid = 'AL' THEN 1  else 0 END) AS alaward, 
+COUNT(case WHEN awardid = 'BBWAA Manager of the Year' AND lgid = 'NL' THEN 1 else 0 END) AS nlaward
+FROM awardsmanagers
+GROUP BY playerid, yearid
+having COUNT(case WHEN awardid = 'BBWAA Manager of the Year' AND lgid = 'AL' THEN 1 else 0 END) = 1 AND COUNT(case WHEN awardid = 'BBWAA Manager of the Year' AND lgid = 'NL' THEN 1 else 0 END) = 1
+ORDER BY yearid ASC
 
