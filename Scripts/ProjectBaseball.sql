@@ -110,11 +110,8 @@ WHERE totalgamesbypark.totalgames >= 10 AND homegames.year = 2016
 GROUP BY homegames.team, homegames.park
 ORDER BY averageattendance ASC
 LIMIT 5 
-Answer 8 is found after running query.
+Answer 8 is found after running query
 
-
-SELECT *
-FROM awardsmanagers
 
 SELECT playerid, yearid, COUNT(case WHEN awardid = 'BBWAA Manager of the Year' AND lgid = 'AL' THEN 1 END) AS alaward, 
 COUNT(case WHEN awardid = 'BBWAA Manager of the Year' AND lgid = 'NL' THEN 1 END) 
@@ -122,6 +119,10 @@ FROM awardsmanagers
 GROUP BY playerid, yearid
 HAVING alaward = 1 AND nlaward = 1
 ORDER BY yearid ASC
+
+SELECT *
+FROM awardsmanagers
+
 
 SELECT playerid, yearid, COUNT(case WHEN awardid = 'BBWAA Manager of the Year' AND lgid = 'AL' THEN 1  else 0 END) AS alaward, 
 COUNT(case WHEN awardid = 'BBWAA Manager of the Year' AND lgid = 'NL' THEN 1 else 0 END) AS nlaward
